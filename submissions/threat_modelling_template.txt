@@ -1,0 +1,47 @@
+Docker Threat Modeling 
+1. Spoofing -- Docker supports the addition and removal of capabilities. 
+Removing all capabilities not required for the correct function of container. 
+We should remove 'new_raw' capability if not required as it gives attacker access to container the ability to create spoofed network traffic
+
+2. Tampering -- Misconfiguration of docker, attacker able to take down the docker client and the attacker can able to pull the 
+vulnerable images that could cause an critical issue. TLS CA certificate is responsible for secure communication between the docker 
+server and client. It should be protected and tampering this file could hijack the docker client from the users control.
+
+3. Repudiation -- Changes made in Docker daemon which are not right by default may lead to misconfiguration. Able to audit /etc/docker/daemon.json to 
+log events on the file 
+
+
+4. Information Disclosure -- API keys and database passwords must be kept secure to prevent attackers gaining access. Container file system 
+should be set to read-only.
+
+5. Denial of Service -- Limiting the memory mechanisms which helps in prevention of DOS attacks, In general container can consumes all of the 
+hosts memory utilization and some other containers starve for the resource utilization. 
+
+6. Elevation of privilege -- Using --privileged flag, can access all the disk mounted on hosts and it gains read-writes access to 
+available files. Avoiding privileged access should be strictly followed. We can remediate by 'no-new-privileges' flag
+
+
+Kubernetes Threat Modeling 
+1. Spoofing -- API server is a critical component of a kubernetes cluster. Enabling attackers to compromise clusters via API servers, 
+allowing them run code to perform malicious activity by installing 3rd party softwares/malware etc.,
+
+2. Tampering -- etcd is responsible for key-value store which serves as the primary backbone for kube cluster. 
+Once the data lost from key store it couldnot be recovered. It should be on the top priority list and it should be protected from 
+unauthorized reads/writes. We can set the ownership to etcd:etcd
+
+3. Repudiation -- By enabling logging we can sort out the repudiation threat. Logging the containers standard output as external logs 
+
+4. Information Disclosure --  Etcd manages and stores sensitive information such as ssh keys Oauth tokens, passwords. We should avoid 
+dumping them in pod definitions rather we can store those confidential info in secrets is considered to be safe.
+
+5. Denial of Service -- Kubelets running on the worker nodes can send execessive reuests which results in DOS attacks. It can be mitigated by enabling node-restriction admission controller to vet all incoming requests and allow the requests coming only from registered nodes
+
+Docker-bench Run Results and Analysis
+From the failed findings, select and document 3 findings from the Docker-bench results that you want to harden based on the 5 attack surface areas you identified in Step 1. At least 1 of the 3 hardened findings should be different from the ones mentioned in the exercise (i.e. 5.10, 5.14, and 5.22).
+
+These are the three failed findings I'll fix. These are based on the CIS Docker Benchmark v1.2.0
+1. 2.2 Ensure the logging level is set to 'info'. It's related to Docker Threat Model "3. Configuration files are modified by unknowns actor".
+2. 5.10 Ensure that the memory usage for the container is limited (Automated). It's related to Docker threat Model "4. Over-allocated resources for Docker Daemon".
+3. 5.25 Ensure that the container is restricted from acquiring additional privileges (Automated). It's related to the Docker threat model "1. Elevated privileges".
+
+Note:  This last one is a manual check and does not show as gone from the failures. 

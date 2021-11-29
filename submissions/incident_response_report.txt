@@ -1,0 +1,15 @@
+1. Incident commander name: cmiyachi
+2. Executive Summary of what happened:
+	Three containers were spun up in our clutser by an attacker (minergate, moneropool, and cryptotonight)
+3. Summary of what was affected: 
+	Cryptominers were run on our system which affects our perfomance and threatens our security. 
+4. Summmry of the impact:
+	Our security monitoring found a spike in CPU usage.  The attacker had admin access to our cluster. 
+5. Summary of the remediation steps:
+	Remove the pods not created by us `kubectl delete pod <pod-name> --force`
+	Introduce role based authentication and rotate the credentials every quarter.
+	Continue to monitor with our security tools (falco, grafana)
+6. Summary of lessons learned:
+	Create an alert for CPU usage above 50%
+	Tighten credentials across our system with RBAC and rotate credentials 
+

@@ -1,0 +1,9 @@
+	
+- Create a test environment and monitor it using the tools we created in the last project - observability using a monitor dashboard, and set alerts when
+  errors occur.  
+- Make the changes and deploy to the test environment.  
+	- If need be rollback changes using github to a previously working verison
+	- Ideally create automated tests but do manually testing if necessary
+	- Use an issue tracking tool like Jira or Github Issues to track any issues or bugs found.
+	- Make sure the testing has appropriate load of usage on the applicaiton which can be automated 
+- Once ready, deploy to production and continue to montor with the dashboard monitor. 
